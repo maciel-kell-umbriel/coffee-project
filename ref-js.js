@@ -1,18 +1,18 @@
 "use strict"
 
 function renderCoffee(coffee) {
-    var html = '<tr class="coffee">';
-    html += '<td>' + coffee.id + '</td>';
-    html += '<td>' + coffee.name + '</td>';
-    html += '<td>' + coffee.roast + '</td>';
-    html += '</tr>';
+    var html = '<div class="coffee">';
+    // html += '<td>' + coffee.id + '</td>';
+    html += '<h2>' + coffee.name + '</h2>';
+    html += '<p>' + coffee.roast + '</p>';
+    html += '</div>';
 
     return html;
 }
 
 function renderCoffees(coffees) {
     var html = '';
-    for(var i = coffees.length - 1; i >= 0; i--) {
+    for(var i = 0; i < coffees.length; i++) {
         html += renderCoffee(coffees[i]);
     }
     return html;
@@ -23,12 +23,16 @@ function updateCoffees(e) {
     var selectedRoast = roastSelection.value;
     var filteredCoffees = [];
     coffees.forEach(function(coffee) {
-        if (coffee.roast === selectedRoast) {
+        if ((coffee.roast === selectedRoast || selectedRoast === 'All') && coffee.name.toLowerCase().includes(searchbar.value.toLowerCase())) {
             filteredCoffees.push(coffee);
+
         }
     });
     tbody.innerHTML = renderCoffees(filteredCoffees);
 }
+
+// create flex box, set to rows, and wrap.
+// each name needs to be a div flex item. 50% width
 
 // from http://www.ncausa.org/About-Coffee/Coffee-Roasts-Guide
 var coffees = [
@@ -48,12 +52,31 @@ var coffees = [
     {id: 14, name: 'French', roast: 'dark'},
 ];
 
+function addCoffees(e) {
+    e.preventDefault();
+    console.log(e)
+    var addID = coffees.length + 1;
+    var addName = newCoffee.value.toString();
+    var addRoast = newRoast.value.toString();
+    var input = {id: addID, name: addName, roast: addRoast};
+    coffees.push(input);
+    console.log(coffees);
+    tbody.innerHTML = renderCoffees(coffees);
+}
+
+
 var tbody = document.querySelector('#coffees');
+var submitButton2 = document.querySelector('#submit2');
 var submitButton = document.querySelector('#submit');
 var roastSelection = document.querySelector('#roast-selection');
+var searchbar = document.querySelector('#search-bar');
+
+var newCoffee = document.querySelector('#addNewCoffee')
+var newRoast = document.querySelector('#newRoastSelection');
 
 tbody.innerHTML = renderCoffees(coffees);
 
 submitButton.addEventListener('click', updateCoffees);
+submitButton2.addEventListener('click', addCoffees);
 
 searchbar.addEventListener('keyup', updateCoffees);
