@@ -59,3 +59,5 @@ tbody.innerHTML = renderCoffees(coffees);
 submitButton.addEventListener('click', updateCoffees);
 
 searchbar.addEventListener('keyup', updateCoffees);
+
+roastSelection.addEventListener("change", updateCoffees);
